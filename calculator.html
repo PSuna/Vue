@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+
+  <h3>간단한 계산기</h3>
+  <div id="cal">
+  
+    <input type="number" v-model.number="myNum1">
+    <input type="number" v-model.number="myNum2">
+    <button v-on:click="add">덧셈계산</button>
+    <button v-on:click="subtract">뺄셈계산</button>
+    <button v-on:click="multiple">곱셈계산</button>
+    <button v-on:click="division">나눗셈계산</button>
+    <p>결과는 {{myResult}}입니다.</p>
+  
+    <p>{{count}}</p>
+    <button @click="plusStep(10)">10씩 증가</button>
+    <button @click="plusStep(100)">100씩 증가</button>
+    <button @click="plusStep(1000)">1000씩 증가</button>
+  
+  </div>
+
+  <script>
+    new Vue({
+        el: '#cal',
+        data: {
+          myNum1: 0,
+          myNum2: 0,
+          myResult: 0,
+          count: 0
+        },
+        methods: {
+          add: function () {
+            this.myResult = this.myNum1 + this.myNum2;
+          },
+          subtract: function () {
+            this.myResult = this.myNum1 - this.myNum2;
+          },
+          multiple: function () {
+            this.myResult = this.myNum1 * this.myNum2;
+          },
+          division: function () {
+            this.myResult = this.myNum1 / this.myNum2;
+          },
+          plusStep: function (step) {
+            this.count += step;
+          }
+        }
+      })
+
+  </script>
+  
+</body>
+</html>
