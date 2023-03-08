@@ -41,6 +41,8 @@
     <p v-bind:align="myAlign">우측정렬을 v-bind로 지정</p>
 
     <!-- 인라인 스타일 지정 : 태그에다가 바로 스타일을 지정하는 방식 -->
+    <!-- 여기서 v-bind:style = "{ 속성 : 속성값}" 로 작성 해주면됨-->
+    <!-- ★ 주의할점 CSS 속성 표기시 카멜 표현식으로 표현해야함!!!!! ★  --> 
     <p style="color: #E80">문자색 직접 지정</p>
     <p v-bind:style="{color:myColor}">v-bind로 문자색 직접 지정</p>
 
@@ -52,7 +54,11 @@
 
     <p class="strike-through">직접 클래스 지정</p>
     <p v-bind:class="myClass">v-bind로 클래스 지정</p>
+
+    <!-- ★ 주의할점 클래스를 복수 지정시 [ ] 안에 여러개의 클래스를 선언해줘야함-->
     <p v-bind:class="[myClass, darkClass]">v-bind를 복수로 지정</p>
+    
+    <!-- 자바스크립트에서의 classList.togle() 과 같은 역할을함, 클래스를 add , remove = 스위치 역할 -->
     <p v-bind:class="{'strike-through' : isON}">데이터로 클래스 ON/OFF</p> <!-- 토글 -->
 
     <button type="button" v-on:click="changeClass">변경</button>

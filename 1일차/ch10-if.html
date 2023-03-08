@@ -14,11 +14,11 @@
       <input type="checkbox" v-model="myVisible">표시
     </label>
 
-    <!-- show는 display : none을 했다가 display : on을 했다가 함 => 얘는 숨기는것 -->
+    <!-- show는 display : none , display : block을 함 CSS 속성값이 변경되는것 -->
     <p v-show="myVisible">쇼박스 ON</p>
 
-    <!-- v-if는 없애는 것 -->
-    <p v-if="myVisible">IF 박스 ON</p>
+    <!-- v-if는 조건이 맞을때만 실행 -->
+    <p v-if="myVisible">체크박스 ON</p>
     <p v-else>체크박스 OFF</p>
 
     <button v-if="isShow" @click="good">좋아</button>
@@ -30,6 +30,7 @@
       <h1>template titles</h1>
       <p>template p tag</p>
     </template>
+
     <template v-else>
       <h1>else template titles</h1>
       <p>else template p tag</p>

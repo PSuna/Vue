@@ -11,7 +11,12 @@
 <body>
   
   <div id="app">
-    <!-- v-model : input태그에서 넣은 데이터를 아래로(뷰로) 가져와서 넣어줌-->
+    <!-- v-model : input태그에서 넣은 데이터(value)를 직접 반영함-->
+    <!-- 사용자의 입력을 받는 UI 요소들의 입력 값이 자동으로 뷰 데이터 속성에 연결-->
+    <!-- input : value / input -->
+    <!-- checkbox : checked / change -->
+    <!-- select : value / change -->
+    <!-- radio : value -->
     <input type="text" v-model="myName" placeholder="이름">
     <p>나는 {{myName}} 입니다</p>
     <textarea v-model="myText"></textarea>

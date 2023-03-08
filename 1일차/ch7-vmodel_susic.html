@@ -13,12 +13,13 @@
   <div id="app">
     <!-- lazy : 엔터키를 누른후에 텍스트가 바뀜 -->
     <input v-model.lazy="myText">
-    <p>입력 후 표시 {{myText}}</p>
+    <p>엔터키 및 화면 다른곳을 클릭한후 표시됨 {{myText}}</p>
 
     <!-- 텍스트가 실시간으로 바뀜 -->
     <input v-model="myText2">
     <p>입력 후 표시 {{myText2}}</p>
 
+    <!-- number로 인식되서 parseInt를 안해줘도됨 -->
     <input v-model.number="myNumber" type="number">
     <p>100을 더해서 표시 : {{100+myNumber}}</p>
 
