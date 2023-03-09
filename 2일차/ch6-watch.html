@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+  
+  <div id="app">
+    <p>금지 문자는「{{forbiddenText}}」</p>
+    <textarea v-model="inputText"></textarea>
+    <br>
+    <p>앞으로 {{restSec}}</p>
+    <button v-on:click="startTimer">START</button>
+  </div>
+
+  <script>
+    new Vue({
+      el : '#app',
+      data : {
+        forbiddenText : '안되',
+        inputText : '오늘은 날씨가 좋습니다.',
+        restSec : 10,
+        timerObj : null
+      },
+      methods : { 
+        startTimer: function () {
+          clearInterval(this.timerObj); // setInterval의 고유한 ID를 통해 멈추는것 
+          this.restSec = 10;
+          this.timerObj = setInterval(() => { // setInterval이 발생하고나서 clearInterval이 발생함
+                                              // setInterval을 실행할때마다 반환되는 값은 중복되지않는 고유한 ID가 나옴
+                                              // 고유한 ID는 timerObj에 넣어줌
+            this.restSec--; // 1초마다 실행할 내용을 입력
+          }, 1000); // 1000 = 1초
+        }
+      },
+      watch: {   
+        restSec : function(){
+          if(this.restSec <= 0){
+            alert('제한 시간 입니다.');
+            clearInterval(this.timerObj); // 제한시간이면 종료시키는것
+          }
+        },
+        inputText : function(){ // 내가 값을 입력할때마다 금지 텍스트가 존재하는지 확인하는것(감시하는것)
+          var pos = this.inputText.indexOf(this.forbiddenText);
+        if(pos >= 0){ // textarea에 금지단어가 들어온 경우
+          alert(this.forbiddenText + "는 입력할 수 없습니다.");
+          this.inputText = this.inputText.substr(0,pos); // 금지단어 부분만 잘라서 가져옴
+        }
+       }
+      }
+    })
+  </script>
+</body>
+
+</html>

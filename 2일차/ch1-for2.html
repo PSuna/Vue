@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+  
+  <div id="app">
+
+    <h3>관심 받고 있는 언어 랭킹</h3>
+    <table>
+      <thead>
+        <!--연도-->
+        <th v-for="item in header">
+          {{item}}
+        </th>
+      </thead>
+      <tbody>
+        <!-- 언어별 순위 -->
+        <tr v-for="line in ranking">
+          <td v-for="item in line">
+            {{item}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    let headerData = ["프로그래밍언어", 2018, 2013, 2008, 2003, 1998];
+    let rankingData = [
+                        ["자바", 1, 2, 1, 1, 16],
+                        ["C", 2, 1, 2, 2, 1],
+                        ["C++", 3, 4, 3, 3, 2],
+                        ["Python", 4, 7, 6, 11, 23],
+                        ["JavaScript", 7, 10, 8, 7, 20]
+                      ];
+    new Vue({
+      el: '#app',
+      data : {
+        header : headerData,
+        ranking : rankingData
+      }
+    })
+  </script>
+
+  <hr>
+
+  <div id="app2">
+    <h3>목록을 구성하는 데이터 변경시 목록 업데이트</h3>
+    <ul>
+      <li v-for="item in myArray">
+        <!-- 배열 값 -->
+        {{item}}
+      </li>
+    </ul>
+
+    <button @click="addList">맨 뒤에 추가</button>
+    <button v-on:click="addObj(3)">네번째에 추가</button>
+    <button v-on:click="changeObj(0)">첫번째를 변경</button>
+    <button @click="deleteObj(1)">두번째를 삭제</button>
+  </div>
+
+    <script>
+
+      let data = ['첫번째', '두번째', '세번째', '네번째','다섯번째'];
+
+      new Vue({
+        el : "#app2",
+        data : {
+          myArray : data
+        },
+        methods : {
+          addList : function(){
+            // myArray 맨뒤에 데이터를 추가
+            // 자바스크립트(javascript)의 문법을 가져와서 사용
+            this.myArray.push(['맨뒤에 추가']);
+          },
+          addObj : function(index){
+            this.myArray.splice(index,0,['추가']);
+          },
+          changeObj : function(index){
+            this.myArray.splice(index,1,['변경']);
+          },
+          deleteObj : function(index){
+            this.myArray.splice(index,1);
+          }
+        }
+      })
+    </script>
+
+    <hr>
+
+    <div id="app3">
+      <ul>
+        <li v-for="item in myArray">
+          <!-- 배열 데이터를 나열 -->
+          {{item}}
+        </li>
+      </ul>
+      <button @click="sortData(myArray)">정렬</button>
+    </div>
+
+    <script>
+      
+      new Vue({
+        el : "#app3",
+        data : {
+          myArray : ['one', 'two', 'three', 'four', 'five']
+        },
+        methods : {
+          sortData : function(dataList){
+            dataList.sort(function(a,b){
+
+               //오름 차순 정렬
+              // 5, 10 , 11 , 12
+              // 5 < 10 => return -1 -> -1이 반환되면 상태(순서)는 5,10 으로 유지됨 
+              // EX) 10 < 1 => return 1 => 1이 반환 되면 순서는 1 , 10 으로 바뀜
+              // ------------------------------------------------------------------
+              // 오름 차순 정렬
+              return (a < b ? -1 : 1);
+
+              // 내림차순 정렬 : 부등호를 반대로 바꾸면 내림차순 정렬이됨
+              // return (a > b ? -1 : 1);
+
+            })
+          }
+        }
+      })
+
+    </script>
+
+    <!-- 구구단 보이기 , 변경버튼 : 해당 단수 보이게-->
+
+    <div id="app4">
+      <p>숫자 배열 조작과 구구단 출력</p>
+      <ul>
+        <!-- 내가 한 방식 -->
+        <!-- <li v-for="n in 10" v-if="n % 2 == 0">
+          {{n}}
+          <button v-on:click="changeDan(n)">변경</button>
+          <button v-on:click="deleteDan">삭제</button>
+        </li> -->
+
+        <!-- 교수님이 한 방식 : 배열 사용해서 만들기 -->
+        <li v-for="item in myArray" v-if="item % 2 == 0">
+          {{item}}
+          <button v-on:click="change(item)">변경</button>
+          <button v-on:click="deletes(item)">삭제</button>
+        </li>
+
+
+      </ul>
+      <!-- 내가한 방식에서 필요한 버튼들 -->
+      <!-- <button @click="countUp">추가</button>
+      <button @click="visible">구구단 보이기</button> -->
+
+      <!-- 교수님이한 방식에서 필요한 버튼들 -->
+      <button @click="add()">추가</button>
+      <button @click="showData()">구구단 보이기</button>
+
+      <!-- 내가한 방식에서 필요한 template : visible 
+        <template v-if="myVisible">
+        <ul>
+          <li v-for="item in myArray">
+            {{num}} * {{item}} = {{num * item}}
+          </li>
+        </ul>
+      </template> -->
+
+      <div v-if="visible">
+        <!-- 구구단 출력 -->
+          <p v-for="item in 9" v-bind="no">
+            {{no}} * {{item}} = {{no * item}}
+          </p>
+      </div>
+
+    </div>
+
+
+    <script>
+      new Vue({
+        el : "#app4",
+        data : {
+          /* 교수님이 한 방식에서 필요한 변수들 */
+          no : 0,
+          visible : false,
+          myArray : [2,4,6,8,10]
+
+
+          /* 내가한 방식에서 필요한 변수들 
+          num : 2,
+          myArray : [1,2,3,4,5,6,7,8,9],
+          myVisible : true
+          */
+        },
+        methods : {
+          /* 교수님이 한 방식에서 필요한 메소드 */
+          change : function(item){
+            this.no = item;
+          },
+          add : function(){
+            this.no++;
+          },
+          showData : function(){
+            // 삼항 연산자
+            return this.visible == true ? this.visible = false : this.visible = true;
+          },
+          deletes : function(item){
+            this.no = 0;
+            // 심화 문제 풀때 필요한것
+            this.myArray = this.myArray.filter(function(val){
+              return item != val;
+            })
+          }
+
+          /* 내가한 방식에서 필요한 메소드
+          changeDan : function(n){
+            this.num = n;
+          },
+          visible : function(){
+            if(this.myVisible){
+              this.myVisible = false;
+            }else{
+              this.myVisible = true;
+            }
+          },
+          deleteDan : function(){
+            this.num = 0;
+          },
+          countUp : function(){
+            this.num++;
+          }*/
+        }
+      })
+    </script>
+
+</body>
+
+</html>

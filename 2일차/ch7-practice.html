@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+
+  <div id="app">
+    
+      <label>금지문자(,로 나누어 복수입력가능)<input type="text" v-model="banText" v-bind:disabled="isOn"></label><br>
+      <label>제한시간을 입력하세요(초) <input type="text" v-model="startSet" v-bind:disabled="isOn"></label>
+      <button @click="[myDisable(),startTimer(startSet)]" v-bind:disabled="isOn">시작</button><br>
+
+    <p>남은시간 : <span>{{restSec}}</span>초</p>
+    <textarea v-model="inputText" v-bind:disabled="!isOn"></textarea>
+    <p><span>{{strLength}}</span>개의 문자를 입력하였습니다.</p>
+    <p>별점 : <span>{{score}}</span> (금지문자 1개당 12점)</p>
+  </div>
+
+  <script>
+    new Vue({
+      el : "#app",
+      data : {
+        banText : '',
+        inputText: '',
+        restSec: 0,
+        timerObj: null,
+        score : 0,
+        strLength : 0,
+        isOn : false,
+        startSet : 0
+
+      },
+      methods : {
+        startTimer : function(startSet){
+          this.restSec = startSet;
+          clearInterval(this.timerObj);
+          this.timerObj = setInterval(()=>{
+            this.restSec--;
+          },1000)
+        },
+        myDisable : function(){
+          this.isOn == false ? this.isOn = true : this.isOn = false;
+        }
+        
+      },
+      watch : {
+        restSec : function(){
+          if(this.restSec <= 0){
+            this.strLength = this.inputText.length;
+            alert("제한시간입니다.");
+            this.isOn = false;
+            clearInterval(this.timerObj);
+          }
+        },
+        inputText: function () { // 내가 값을 입력할때마다 금지 텍스트가 존재하는지 확인하는것(감시하는것)
+          var pos = this.inputText.indexOf(this.banText);
+          if (pos >= 0) { // textarea에 금지단어가 들어온 경우
+            this.restSec += 10;
+            this.score += 12;
+            alert(this.banText + "는 입력할 수 없습니다.");
+            this.inputText = '';
+          }
+        }
+
+      }
+    })
+  </script>
+  
+</body>
+</html>

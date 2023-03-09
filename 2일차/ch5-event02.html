@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+  <div id="app2">
+    <!-- input의 value 속성이 비어있으면 모든 데이터(dataList)가 보이고 검색을 하면
+         해당되는 데이터만 보이도록 -->
+    <input type="text">
+    <ul></ul>
+  </div>
+
+<script>
+  let dataList = ['설악산', '한라산', '북한산', '백두산', '지리산'];
+  $(document).ready(function(){
+
+    init();
+    // $('#app2') // id가 app2 dom을 가지고 올때
+    // $('#app2 > input:text:eq(0)') : id가 app2인 dom 자식중에 input type이 text인 자식중에
+    // 인덱스가 0인 자식을 가지고와라
+    // document.querySelectorAll('') 와 비슷함
+    $('#app2 > input:text:eq(0)').on('change', changeData); // change이벤트
+    
+    function changeData(){
+      $('#app2 > ul:first').empty(); // empty : 내가 가지고는 내용을 깨끗이 비어주는것
+                                     // remove : 아예 없애는것
+
+      let keyword = $('#app2 > input:text:eq(0)').val();
+      if(keyword != ''){ // 입력값이 있으면 해당되는값 가져오기
+        $(dataList).each(function(idx,val){
+          // match : 특정 키워드가 포함되어있는지 없는지 판단할때 사용
+          // indexOf와 비슷한 역할을함
+          if(val.match(keyword)){ 
+            $('#app2 > ul:first').append(
+              $('<li />').text(val)
+            )
+          }
+        })
+      }else{ // 입력값이 없으면 모든 데이터 가져오기
+        init();
+      }
+    }
+
+    // init() => initialize 초기화하다
+    function init(){
+      $(dataList).each(function(idx, val){
+        $('#app2 > ul').append(
+          $('<li/>').text(val)
+        )
+      })
+    }
+  })
+</script>
+
+<div id="app3">
+  <input type="text" v-model="findWord">
+  <ul>
+    <li v-for="item in findItems">
+      {{item}}
+    </li>
+  </ul>
+</div>
+
+<script>
+  let myArray = ['설악산', '한라산', '북한산', '백두산', '지리산'];
+  new Vue({
+    el : "#app3",
+    data : {
+      findWord : '',
+      items : myArray
+    },
+    computed : {
+      findItems : function(){
+        if(this.findWord){
+          return this.items.filter(function(value){
+          // indexOf : 데이터에 내가 입력한값이 어느위치에 있는지 index값 리턴
+            return (value.indexOf(this.findWord) > -1) 
+          }, this) // 여기서의 this는 value를 뜻함 => 앞의 조건에 만족하는 애들만[this(=value)] 반환
+                   // 조건에 만족하는 애들만 findItems에 들어감  
+        }else{
+          return this.items; // 값이 입력되지 않으면 items를(전체 데이터 값들) 반환
+        }
+      }
+    }
+  })
+</script>
+
+  <div id="app4">
+    <p v-bind:style="{backgroundColor : mixColor}">
+      {{mixColor}}
+    </p>
+    <input type="range" v-model="R" min="0" max="255">
+    <input type="range" v-model="G" min="0" max="255">
+    <input type="range" v-model="B" min="0" max="255">
+  </div>
+
+  <script>
+    new Vue({
+      el : "#app4",
+      data : {
+        R : 255,
+        G : 150,
+        B : 100
+      },
+      computed : {
+        mixColor : function(){
+          var ans = "RGB(" + this.R + "," + this.G + "," + this.B + ")";
+          return ans;
+        }
+      }
+    })
+  </script>
+
+
+
+
+</body>
+</html>
