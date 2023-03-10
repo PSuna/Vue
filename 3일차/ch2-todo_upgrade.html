@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+  
+  <h2>ToDo리스트</h2>
+  <div id="app">
+    <div v-for="(todo, index) in todos"> 
+      <label>
+                              <!-- todo.done : 객체에 있는 값을 가져와서 쓰기위해 선어함-->
+        <input type="checkbox" v-model="todo.done">
+        <span :class="{donestyle:todo.done}">
+          {{todo.text}} (완료일 {{todo.date}})
+        </span>
+      </label>
+      <button @click="dateExtension(index)">완료일 연장</button>
+    </div>
+
+    <input type="text" v-model:trim="addText" placeholder="할일"> / 
+    <input type="text" v-model:trim="addDate" v-on:keyup.enter="addToDo" placeholder="완료일">(YYYYMMDD 형식으로 입력)
+
+    <p>
+      <button @click="cleanToDo">처리완료삭제</button>
+      <button @click="todoSort">할일 순으로 정렬</button>
+      <button>완료일로 정렬</button>
+    </p>
+    <p>{{todos.length}}건 중 {{remaining}}건 처리</p>
+  </div>
+
+  <script>
+    new Vue({
+      el : "#app",
+      data : {
+        addText : '',
+        addDate : '',
+        todos : [
+          {done : false, text : '빵사기', date : '20191201'},
+          {done : false, text : '커피사기', date : '20190702'}
+        ]
+      },
+      computed : {
+        remaining : function(){
+          return this.todos.filter(function(val){
+            return val.done;
+          }).length; // true의 갯수가 몇개인지 체크
+        },
+        
+      },
+      methods : {
+        addToDo : function(){
+          if(this.addText && this.addDate){ // 두개의 값이 입력되어 있다면
+            this.todos.push({done:false, text:this.addText, date : this.addDate});
+            this.addText = '';
+            this.addDate = '';
+          }
+        },
+        cleanToDo : function(){
+          this.todos = this.todos.filter(function(val){
+            return val.done == false;
+          })
+        },
+        dateExtension : function(index){
+          let date = this.todos[index].date;
+        
+          let year = date.substr(0,4);
+          let month = date.substr(4,2);
+          let day = date.substr(6,2);
+
+          date = new Date(year,month-1,day);
+    
+          date = new Date(date.setDate(date.getDate() + 1));
+
+         year = date.getFullYear();
+         month = ("0" + (1+date.getMonth())).slice(-2);
+         day = ("0" + date.getDate()).slice(-2);
+         date = year + month + day;
+
+          this.todos[index].date = date;
+
+        },
+        todoSort : function(){
+          this.todos.sort(function (a, b) {
+
+            //오름 차순 정렬
+            // 5, 10 , 11 , 12
+            // 5 < 10 => return -1 -> -1이 반환되면 상태(순서)는 5,10 으로 유지됨 
+            // EX) 10 < 1 => return 1 => 1이 반환 되면 순서는 1 , 10 으로 바뀜
+            // ------------------------------------------------------------------
+            // 오름 차순 정렬
+            return (a < b ? -1 : 1);
+
+            // 내림차순 정렬 : 부등호를 반대로 바꾸면 내림차순 정렬이됨
+            // return (a > b ? -1 : 1);
+
+          })
+        }
+      }
+    })
+  </script>
+
+  <style>
+    .donestyle{
+      text-decoration: line-through;
+      color : red;
+    }
+  </style>
+
+</body>
+</html>

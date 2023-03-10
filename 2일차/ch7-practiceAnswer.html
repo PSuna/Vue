@@ -12,21 +12,21 @@
   <div id="app">
     <h1>제한 시간내에 문자 입력하기</h1>
     <label>
-      금지문자(,로 나누어 복수입력가능)
-      <input type="text" v-model="forhiddenText" v-bind:disabled="!isWritable">
+      금지문자(,로 나누어 복수입력가능)           <!-- v-bind는 :disabled와 같이 쓸수있다-->
+      <input type="text" v-model="forhiddenText" :disabled="!isWritable">
     </label>
-  <br>
+    <br>
 
-  <label>
-    제한시간을 입력하세요(초)
-    <input type="number" v-model.number="setTime" v-bind:disabled="!isWritable">
-    <button @click="start" v-bind:disabled="!isWritable">시작</button>
-  </label>
+    <label>
+      제한시간을 입력하세요(초)
+      <input type="number" v-model.number="setTime" :disabled="!isWritable">
+      <button @click="start" v-bind:disabled="!isWritable">시작</button>
+    </label>
 
-  <p>남은시간 : {{limitTime}}</p>
-  <textarea v-model="inputText" v-bind:disabled="isWritable"></textarea>
-  <p>{{wordCnt}}개의 문자를 입력.</p>
-  <p>벌점:{{resultScore}} (금지문자 1개당 12점)</p>
+    <p>남은시간 : {{limitTime}}</p>
+    <textarea v-model="inputText" v-bind:disabled="isWritable"></textarea>
+    <p>{{wordCnt}}개의 문자를 입력.</p>
+    <p>벌점:{{resultScore}} (금지문자 1개당 12점)</p>
   </div>
 
   <script>
@@ -47,17 +47,18 @@
           this.isWritable = false;
           this.limitTime = this.setTime;
           // 본인 자신을 가르키는 this를 vueObj에 넣어줌
-          const vueObj = this; // 뷰 그자체(자기자신)
-          this.timerObj = setInterval(function(){
-            vueObj.limitTime--;
+          const vueObj = this; // this : 객체(new Vue) // 뷰 그자체(자기자신)
+          this.timerObj = setInterval(function(){ // setInterval 타이머에 대한 고유ID가 반환됨
+            vueObj.limitTime--; // 익명함수에서의(setInterval) this => window this를 의미함 
+                                // 따라서 Vue의 this를 쓰기위해 vueObj.limitTime--; 로해야함
           },1000)
         }
       },
-      watch : {
+      watch : { // 계속 노려보다가(감시하다가) 특정 조건을 만족하게 되면 캐치하는것
         limitTime : function(){
           if(this.limitTime <= 0){
             alert("제한시간에 도달했습니다.");
-            clearInterval(this.timerObj);
+            clearInterval(this.timerObj); // 작동중인 타이머를 취소하고 삭제한다는말
             this.isWritable = true;
             this.wordCnt = this.inputText.length;
           }
@@ -66,17 +67,17 @@
           let dataList = this.forhiddenText.split(',');
           for(let i=0; i < dataList.length; i++){
             let keyword = dataList[i];
-            let pos = this.inputText.indexOf(keyword);
+            let pos = this.inputText.indexOf(keyword); // indexOf : 내가 입력한 문자가 포함되어있는지 확인
             if(pos > -1){
               alert(this.forhiddenText + '는 입력할 수 없습니다');
-              this.forhiddenCnt++;
+              this.forhiddenCnt++; // 금지어 등장횟수 추가
               this.inputText = this.inputText.substr(0,pos);
               this.limitTime += 10;
             }
           }
         }
       },
-      computed : {
+      computed : { // 데이터에 변화가 있을때 움직이는것
         resultScore : function(){
           return this.forhiddenCnt * 12;
         }
