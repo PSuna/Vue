@@ -12,7 +12,7 @@
   <div id="app">
     {{counter}}<br>
     <!-- new Vue() -->
-    <button v-on:click="incrementCounter">카운터 증가</button>
+    <button v-on:click="incrementCounter">카운터 증가</button> <!-- 부모의 counter -->
     
     <!-- MyComponent가 부모의 incrementCounter를 사용하도록 설정 -->
     <my-component v-on:increment-me="incrementCounter"></my-component>

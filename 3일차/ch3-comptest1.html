@@ -19,12 +19,13 @@
 
   <script>
     // 컴포넌트 생성 => 재사용성이 좋다, 렌더링 시간이 줄어든다.
+    // Vue 생성자에 사용할 수 있는 대부분의 옵션은 컴포넌트에서도 사용할 수 있음
     const MyComponent = {
       template : `<p class='my-comp'>카운터
                     <button @click="addOne">추가</button>
                     {{count}}
                   </p>`,
-      data : function(){ // data : 데이터를 들고있는 함수
+      data : function(){ // data : 데이터를 들고있는 함수 , 컴포넌트에서 data는 함수여야함
         return {
           // 변수 : 값
           count : 0
@@ -41,6 +42,8 @@
     new Vue({
       el : '#app',
       components : { // 지역 컴포넌트
+        // 컴포넌트를 components 인스턴스 옵션으로 등록함으로써 
+        // 다른 인스턴스/컴포넌트의 범위에서만 사용할 수있는 컴포넌트를 만들 수 있음
         'my-component' : MyComponent
       }
     })

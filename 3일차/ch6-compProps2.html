@@ -10,19 +10,20 @@
 <body>
   
   <div id="app">
-    <my-component my-name="또치"></my-component>
+    <my-component my-name="또치"></my-component> <!-- 리터럴 속성 -->
     <my-component my-name="희동"></my-component>
     <my-component></my-component>
   </div>
   
   <script>
     const MyComponent = {
-      template : `<p> 나는 {{myName}} 입니다. </p>`,
+      template : `<p> 나는 {{myName}} 입니다. </p>`, // html의 my-name = js의 myName
       //props : ['']
-      props : {
+      props : { // 검증
         myName : String
       },
-      created : function(){ // Vue 인스턴스 생성 후 실행
+      // 뷰 객체 라이프 사이클 : 생성전 생성후 마운트 수정전 수정후
+      created : function(){ // Vue 인스턴스(객체) 생성 후 실행
         if(this.myName == null){ // myName이 없을때
           this.myName = '마이콜' // 디폴트 값으로 마이콜을 넣겠다는말
         }
@@ -40,20 +41,21 @@
   <hr>
 
   <div id="app2">
+    <!-- 부모에 for문 구문이 있을때의 예제-->
     <!-- for of / for in Vue에선 모두 같다-->
                                         <!-- nuw Vue의 배열-->
-    <my-component v-for="(item,index) in myArray" :my-name="item"></my-component>
+    <my-component v-for="(item,index) in myArray" :my-name="item"></my-component> <!-- 부모꺼 -->
   </div>
   
   <script>
-    let MyComponent2 = {
+    let MyComponent2 = { // 자식
       template : `<p> 나는 {{myName}} 입니다.</p>`,
-      props : {
+      props : { // 검증 or [''] 줘도됨
         myName : String
       },
-      created : function(){
-        if(this.myName == null){
-          this.myName = '도우너';
+      created : function(){ // Vue객체 생성될때마다 실행되는 구문
+        if(this.myName == null){ // myName이 null이라면
+          this.myName = '도우너'; // 디폴트로 '도우너'가 들어감
         }
       }
     }

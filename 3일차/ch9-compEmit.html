@@ -34,11 +34,11 @@
   <div id="app">
     <h3>참여자 명단</h3>
     <p>현재 참여자 수 : {{count}}명</p>
-    <input-component v-on:insert-user-info="counting"></input-component>
+    <input-component v-on:insert-user-info="counting"></input-component> <!-- 부모꺼 -->
   </div>
 
   <script>
-    const printComponent = {
+    const printComponent = { // inputComponent의 자식
       template : `<div>
                     <p> 이름 : {{name}}, 나이 : 만 {{age -1}}, : 소속 : {{dept}}</p>
                   </div>`,
@@ -52,7 +52,7 @@
       }
     }
 
-    const inputComponent = {
+    const inputComponent = { // 자식
       template : `<div>
                     <div>
                       <div>
@@ -101,15 +101,17 @@
       },
       methods:{
         insertUsers : function(){
-          this.userList.push(this.userInfo);
+          this.userList.push(this.userInfo); // 작성한 userInfo 등록
+          // 등록후 입력폼 초기화
           this.userName = '';
           this.userAge = 0;
           this.userDept = '';
-          this.$emit('insert-user-info');
+
+          this.$emit('insert-user-info'); // 부모의 counting 메소드를 실행시킴
         }
       },
       components : {
-        'print-component' : printComponent
+        'print-component' : printComponent // 자식을 선언
       }
     }
 
@@ -126,22 +128,27 @@
           this.count++;
         },
         today : function(){
-          let today = new Date();
-          let year = today.getFullYear();
-          console.log('today.getMonth()' + today.getMonth());
-          let month = ('0' + (today.getMonth() + 1)).slice(-2);
-          console.log('today.getDate()' + today.getDate());
-          let day = ('0' + (today.getDate())).slice(-2);
+          let today = new Date(); // 현재 날짜 및 시간
+          let year = today.getFullYear(); 
+
+          //console.log('today.getMonth()' + today.getMonth());
+          // slice() - 문자열을 잘라옴 => 양수 : 왼쪽에서 부터 자름 / 음수 : 오른쪽에서부터 자름
+          // 한자리수는 앞에 0이 붙은채로 나옴 단, 두자리수 이상은 ex) 012일때 뒤에서 두개짤라와야하므로
+          let month = ('0' + (today.getMonth() + 1)).slice(-2); 
+
+          //console.log('today.getDate()' + today.getDate());
+          // 한자리수는 앞에 0이 붙은채로 나옴 단, 두자리수 이상은 ex) 012일때 뒤에서 두개짤라와야하므로
+          let day = ('0' + (today.getDate())).slice(-2); 
 
           return year + '-' + month + '-' + day;
         }
       },
       watch : {
-        count : function(){
-          let pTag = document.querySelector('p');
-          let message = document.createElement('p');
-          message.textContent = this.today() + '기준으로 최종 업데이트 되었습니다.'
-          pTag.after(message);
+        count : function(){ // count가 변하면 실행 = 학생이나 교수가 등록되면 실행
+          let pTag = document.querySelector('p'); // <p>현재 참여자 수 : {{count}}명</p>
+          let message = document.createElement('p'); // p태그 생성
+          message.textContent = this.today() + '기준으로 최종 업데이트 되었습니다.' // innerText도 가능
+          pTag.after(message); // <p>현재 참여자 수 : {{count}}명</p> 뒤에 생성됨
         }
       }
     })

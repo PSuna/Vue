@@ -11,21 +11,22 @@
 <body>
   
   <div id="app">
-    <my-component></my-component>
-    <local-component></local-component>
+    <my-component></my-component> <!-- 전역 -->
+    <local-component></local-component> <!-- 지역 -->
   </div>
 
   <div id="app2">
-    <my-component></my-component>
-    <local-component></local-component>
-    <instance-component></instance-component>
+    <my-component></my-component> <!-- 전역 -->
+    <local-component></local-component> <!-- 지역 -->
+    <instance-component></instance-component> <!-- 지역 -->
   </div>
 
   <script> 
-    // var : 지역, let : 전역
-    // 전역 컴포넌트 선언
+    // var : 전역(함수 내부에 선언된 변수만 지역 변수로 인정, 나머지는 전역변수로 인식) / let : 지역
+    
+    // [전역] 컴포넌트 선언
     // 앞으로 생성될 모든 vue 인스턴스에서 사용할 수 있는 컴포넌트
-    Vue.component('my-component',{
+    Vue.component('my-component',{ // 전역 컴포넌트
       template : `<div>안녕, 전역 컴퓨넌트</div>`
     })
 
@@ -35,12 +36,11 @@
     const component = {
       template : `<div>안녕, 지역 컴포넌트</div>`
       // props
-      
     }
 
     new Vue({
       el : '#app',
-      components : {
+      components : { // 지역 컴포넌트
         // local-component(html표기법) == localComponent(자바스크립트 표기법)
         'localComponent' : component
       }
@@ -48,7 +48,7 @@
 
     new Vue({
       el: '#app2',
-      components : {
+      components : { // 지역 컴포넌트
         // html에서 사용할 컴포넌트 이름 : {컴포넌트 내용}
         'instance-component' : {
           template : `<div style="border : 1px solid black;"

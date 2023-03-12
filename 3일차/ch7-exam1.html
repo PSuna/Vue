@@ -12,18 +12,18 @@
   <h1>컴포넌트를 숫자로 출력</h1>
 
   <div id="app">
-    <my-component v-for="(item,index) in myNumbers" :my-Num="item"></my-component>
+    <my-component v-for="(item,index) in myNumbers" :my-Num="item"></my-component> <!-- 부모꺼 -->
   </div>
 
   <script>
 
-    let MyComponent = {
-      template : `<div>{{myNum}} {{even}} 입니다.</div>`,
-      // computed 방법
-      props : {
+    let MyComponent = { // 자식
+      template : `<p>{{myNum}} {{even}} 입니다.</p>`,
+      props : { // 자식이 부모의 데이터를 사용하고싶을때 props에 정의되어있어야함
         myNum : Number
       },
-      computed : { // computed는 결과값을 반환 시켜줘야한다
+      // 2가지 풀이 방법 : 1. computed 방법 / 2. created 방법
+      computed : { // ★ computed는 반드시 결과값을 반환 시켜줘야한다 ★
         even : function(){
           if(this.myNum % 2 == 0){
             return this.even = "짝수";
@@ -36,8 +36,8 @@
       // props : {
       //   myNum : Number
       // },
-      // created : function(){
-      //   if(this.myNum % 2 == 0 ){
+      // created : function(){ // Vue객체가 생성될떄 실행되는 구문
+      //   if(this.myNum % 2 == 0 ){ 
       //     this.even = "짝수";
       //   }else{
       //     this.even = "홀수";
@@ -57,25 +57,33 @@
     })
   </script>
   
+
   <div id="app2">
     <!-- new Vue() -->
     <input v-model="name">
     <name-component :today="200+15" :my-name="name"></name-component>
     
     <!-- dataList안에 있는 today, myName을 자식 컴포넌트에 binding-->
-    <name-component v-bind="dataList"></name-component> <!-- v-bind="dataList" : 배열을쓰는 2번째 방식-->
-    <name-component my-name="또치" :today="100"></name-component>
-    <name-component my-name="12.5"></name-component> <!-- today가 디폴트로 -1이 나옴-->
+    <!-- 객체의 모든 속성을 props로 전달하려면, 인자없이 v-bind를 쓸 수 있습니다.-->
+    <!-- v-bind="dataList" : 객체나 배열이므로 이렇게 표현, 만약 하나라면 :변수명 이렇게 선언-->
+    <name-component v-bind="dataList"></name-component> 
+    <!-- :myName="name" , :today="Date.now()" 라는 의미-->
+    
+    <!-- ★ Vue와 연결시켜서 해당값을 끌어오고 싶을땐 v-bind를 통해 가져와야함 ★-->
+    <name-component :my-name="array.myName" :today="array.today"></name-component> 
+
+    <name-component my-name="또치" :today="100"></name-component> <!-- my-name="또치" : 리터럴 속성 -->
+    <name-component my-name="12.5"></name-component> <!-- my-name="12.5" : 리터럴 속성, today가 디폴트로 -1이 나옴-->
   </div>
 
   <script>
-    const component = {
+    const component = { // 자식
       template : `<p> {{today+1}}, 나는 {{myName}} 입니다. </p>`,
       props : {
         myName : String,
         today : {
           type : Number,
-          default : -1
+          default : -1 // 디폴트
         }
       }
     }

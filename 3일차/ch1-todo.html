@@ -13,9 +13,9 @@
   <div id="app">
     <div v-for="todo in todos"> 
       <label>
-                              <!-- todo.done : 객체에 있는 값을 가져와서 쓰기위해 선어함-->
+                              <!-- todo.done : 객체에 있는 값을 가져와서 쓰기위해 선언함-->
         <input type="checkbox" v-model="todo.done">
-        <span :class="{donestyle:todo.done}">
+        <span :class="{donestyle:todo.done}"> <!-- :class는 v-bind:class와 같음-->
           {{todo.text}}
         </span>
       </label>
@@ -32,10 +32,10 @@
           {done : false, text : '커피사기'}
         ]
       },
-      computed : {
+      computed : { // computed에선 return문이 반드시 필요함
         remaining : function(){
           return this.todos.filter(function(val){
-            return val.done;
+            return val.done; // todos[i].done이 true인것들만 리턴
           }).length; // true의 갯수가 몇개인지 체크
         }
       }

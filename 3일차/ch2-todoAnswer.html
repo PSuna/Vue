@@ -107,29 +107,29 @@
             computed: {
                 remaining: function () {
                     return this.todos.filter(function (val) {
-                        return val.done == true;
-                    }).length;
+                        return val.done == true; // true인것들만 반환
+                    }).length; // true의 갯수를 반환
                 },
                 overdate: function () {
                     return this.todos.filter(function (val) {
-                        let date = new Date();
+                        let date = new Date(); // 현재 날짜 및 시간
                         let year = date.getFullYear();
                         let month = new String(date.getMonth() + 1);
                         let day = new String(date.getDate());
                         if (month.length == 1) month = "0" + month;
                         if (day.length == 1) day = "0" + day;
-                        let due_date = year + month + day;
-                        return val.DueDate < due_date;
-                    }).length;
+                        let due_date = year + month + day; // 현재날짜
+                        return val.DueDate < due_date; // 완료일 < 현재 날짜가 true인거 반환
+                    }).length; // 완료일 < 현재 날짜가 true인거의 갯수를 반환
                 }
             },
             methods: {
                 addToDo: function () {
                     if (this.addtext) {
                         let due_date = this.dueDate;
-                        if (this.dueDate == "") {
-                            let date = new Date();
-                            date = new Date(Date.parse(date) + 1 * 1000 * 60 * 60 * 24);
+                        if (this.dueDate == "") { // 완료일을 입력하지 않았다면 => 완료기한 : 현재날짜 + 1
+                            let date = new Date(); // 현재 날짜 및 시간을 받아서
+                            date = new Date(Date.parse(date) + 1 * 1000 * 60 * 60 * 24); // 현재날짜 + 1
                             let year = date.getFullYear();
                             let month = String(date.getMonth() + 1);
                             let day = String(date.getDate());
@@ -138,34 +138,35 @@
                             due_date = year + month + day;
                             console.log(due_date)
                         }
-                        this.todos.push({
+                        this.todos.push({ // 배열에 push
                             done: false,
                             text: this.addtext,
                             DueDate: due_date
                         });
-                        this.addtext = '';
+                        this.addtext = ''; // 초기화
                     }
                 },
                 cleanToDo: function () {
                     this.todos = this.todos.filter(function (val) {
-                        return val.done == false;
+                        return val.done == false; // todos[i].done이 false인 것들만 리턴(할일을 완료하지 않은것들만 리턴)
                     })
                 },
                 extendDate: function (index) {
                     let str_date = this.todos[index].DueDate;
-                    let y = str_date.substr(0, 4);
-                    let m = str_date.substr(4, 2);
-                    let d = str_date.substr(6, 2);
+                    let y = str_date.substr(0, 4); // year
+                    let m = str_date.substr(4, 2); // month
+                    let d = str_date.substr(6, 2); // day
 
-                    let date = new Date(Date.parse(new Date(y, m - 1, d)) + 1 * 1000 * 60 * 60 * 24);
+                    // 하루를 더함(하루를 연장함) => 1일 * 1000ms * 60초 * 60분 * 24시
+                    let date = new Date(Date.parse(new Date(y, m - 1, d)) + 1 * 1000 * 60 * 60 * 24); 
                     let year = date.getFullYear();
-                    let month = String(date.getMonth() + 1);
+                    let month = String(date.getMonth() + 1); // String으로 변환
                     let day = String(date.getDate());
-                    if (month.length == 1) month = "0" + month;
-                    if (day.length == 1) day = "0" + day;
+                    if (month.length == 1) month = "0" + month; // month가 1글자라면 앞에 '0'을 붙임
+                    if (day.length == 1) day = "0" + day; // day가 1글자라면 앞에 '0'을 붙임
                     let due_date = year + month + day;
 
-                    this.todos[index].DueDate = due_date;
+                    this.todos[index].DueDate = due_date; // 하루 연장한 날짜(String)이 들어감
                 },
                 sortData: function (type) {
                     if (type == "todo") {
