@@ -9,7 +9,7 @@ export default new VueRouter({
 
   // history => #을 제외하고 SPA 구현하기 위한 모드
   // mode default값 : hash
-  mode : 'history',
+  mode : 'hash',
   routes : [
     {
       path : '/',
@@ -28,7 +28,9 @@ export default new VueRouter({
       path : '/boardRead/:item', 
       name : 'boardRead',
       component : myBoardRead,
-      props : true
+      // route 옵션에서 props로 데이터를 받아올 수 있도록 설정
+      // props 속성에 true 값을 넘기면 route params 값을 컴포넌트 props 로 받아올 수 있습니다.
+      props : true 
     },
     //boardWrite
     {

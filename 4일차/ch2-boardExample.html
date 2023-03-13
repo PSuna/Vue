@@ -15,12 +15,12 @@
     <script>
         //jQuery
         $.ajax({
-            url : 'board.json',
+            url : 'board.json', // get 방식
             // data : {},
             // contentType : '',
             // dataType : 'json',
-            success : function(data){
-                let findData = data['board'][0];
+            success : function(data){ // data : json(String)
+                let findData = data['board'][0]; // 첫번째글에 대한 정보
                 console.log(findData['no'],findData['title']
                             ,findData['content'], findData['view']);
                 console.log('==============================');
@@ -35,14 +35,15 @@
         // 자바스크립트
         fetch('board.json')
         .then(response => response.json())
-        .then(data => {
-            let findData = data['board'][0];
+        .then(data => { // data : json(String)
+            let findData = data['board'][0]; // 첫번째 글에대한 정보
             console.log(findData['no'],findData['title']
                         ,findData['content'], findData['view']);
             console.log('==============================');
         })
         .catch(err => console.log(err));
     </script>
+
     <div id="app">
         <h2>간단한 게시판</h2>
         <p>게시판 데이터 json 파일 읽기</p>
@@ -54,16 +55,22 @@
         <!-- 화면에 보여지는 게시글 json파일로 다운로드 -->
         <button v-on:click="saveBoardList">게시판 저장하기</button>
 
-        <!-- 자식 컴포넌트를 활용해서 기능을 나누어 둔 것 -->
+        <!-- 자식 컴포넌트를 활용해서 기능을 나누어 둔 것 : 부품 역할 -->
         <!-- SPA 개념을 활용 -->
+
+        <!-- 목록 리스트 -->
         <my-board-list v-if="listOk" 
                        v-bind:object="dataArray['board']"
                        v-on:board-read="boardRead"
                        v-on:board-write="boardWrite"
                        v-on:board-delete="boardDelete"></my-board-list>
+        
+        <!-- 글 상세 보기 -->
         <my-board-read v-if="readOk" 
                        v-bind:object="boardInfo"
                        v-on:board-list="boardList"></my-board-read>
+        
+        <!-- 글 쓰기 -->
         <my-board-write v-if="writeOk" 
                         v-on:board-list="boardList" 
                         v-on:board-save="boardSave"></my-board-write>
@@ -90,8 +97,9 @@
                 methods : {
                     loadData : function(event){ // 파일을 읽어들이는 메소드
                         console.log(event.target.files);
-                        let file = event.target.files[0].name;
+                        let file = event.target.files[0].name; // 파일 이름
                         if(file){ // 파일 이름이 있다면
+
                             /* jQuery로 읽어오는 부분
                             const vueObj = this;
                             $.ajax({
@@ -105,12 +113,14 @@
                                 }
                             })
                             */
-                           fetch(file)
+
+                           fetch(file) // file이름 ex. board.json
                            .then(response => response.json())
-                           .then(data => { // data : json파일을 읽어온것
+                           .then(data => { // data : board.json파일을 읽어온것
                                 this.dataArray = data; // 읽어온 데이터를 vue 인스턴스에 넣어줌
-                                if(this.dataArray != null && this.dataArray['board'].length > 0){
-                                    this.listOk = true;
+                                console.log(data);
+                                if(this.dataArray != null && this.dataArray['board'].length > 0){ // dataArray 널이 아니고, 값이 들어있다면
+                                    this.listOk = true; // myBoardList 컴포넌트가 나타남
                                 }
                            }).catch(err => console.log(err));
                         }
@@ -145,9 +155,9 @@
                     },
                     boardSave : function(title, content){  // 게시글 저장
                         let no = 1;
-                        if(this.dataArray['board'].length != 0){
-                            let index = this.dataArray['board'].length-1;
-                            no = parseInt(this.dataArray['board'][index].no)+1;
+                        if(this.dataArray['board'].length != 0){ // 데이터의 길이가 0이 아니라면
+                            let index = this.dataArray['board'].length-1; // 총 길이의 -1 왜냐면 인덱스는 0 부터 시작이므로
+                            no = parseInt(this.dataArray['board'][index].no)+1; // no의(게시글 번호) 마지막 번호에 +1
                         }
 
                         let boardInfo = {
@@ -159,7 +169,7 @@
 
                         this.dataArray['board'].push(boardInfo);
 
-                        this.boardList();
+                        this.boardList(); // 게시글 목록 으로 부품을 갈아치움
                     },
                     boardDelete : function(no){ // 게시글 삭제
                         for(let i=0; i<this.dataArray['board'].length; i++){
@@ -220,19 +230,19 @@
                             </table>
                             <button style="float:right;" v-on:click="boardWrite">글쓰기</button>
                         </div>`,
-            props : ['object'],
+            props : ['object'], // v-bind:object="dataArray['board']" 자식에서 부모 데이터를 사용할떄 정의해야함
             methods : {
                 boardRead : function(info){
                     // boardRead와 똑같음
                     // 'board-read' : html에서 인식하는것
                     // info : 부모 컴포넌트의 함수에 매개변수가 존재하면 같이 전달하는 매개변수
-                    this.$emit('board-read', info);
+                    this.$emit('board-read', info); // 부모의 이벤트 함수 실행
                 },
                 boardDelete : function(no){
-                    this.$emit('board-delete', no);
+                    this.$emit('board-delete', no); // 부모의 이벤트 함수 실행
                 },
                 boardWrite : function(){
-                    this.$emit('board-write');
+                    this.$emit('board-write'); // 부모의 이벤트 함수 실행
                 }
             }
         };
@@ -251,10 +261,10 @@
                             </table>
                             <button style="float:right;" v-on:click="boardList">목록</button>
                         </div>`,
-            props : ['object'],
+            props : ['object'], // v-bind:object="boardInfo" 자식에서 부모의 데이터를 사용할때 정의되어야함
             methods : {
                 boardList : function(){
-                    this.$emit('board-list');
+                    this.$emit('board-list'); // 부모의 이벤트함수 실행
                 }
             }
         }
@@ -284,10 +294,10 @@
             },
             methods : {
                 boardList : function(){
-                    this.$emit('board-list');
+                    this.$emit('board-list'); // 부모의 이벤트 함수 실행
                 },
                 boardSave : function(){
-                    this.$emit('board-save', this.title, this.content);
+                    this.$emit('board-save', this.title, this.content); // 부모의 이벤트 함수 실행
                 }
             }
         }

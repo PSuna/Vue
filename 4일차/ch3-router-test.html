@@ -5,6 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <!-- 뷰 cdn -->
   <script src="https://cdn.jsdelivr.net/npm/vue@2.7.13/dist/vue.js"></script>
   <script src="vue-router.js"></script>
 </head>
@@ -13,12 +14,12 @@
     <h1>hello Vue-Router</h1>
     <p>
       <!-- 라우터 연결 -->
-      <router-link to="/foo">Go To Foo</router-link> <!-- to="/foo" : a태그를 의미함 => 경로를 지정해줘야함 -->
+      <router-link to="/foo">Go To Foo</router-link> <!-- ★ to="url" ★ / to="/foo" : a태그를 의미함 => 경로를 지정해줘야함 -->
       <router-link to="/bar">Go To bar</router-link> <!-- 디폴트가 a태그임 -->
     </p>
 
     <!-- router가 렌더링 될 부분 정의-->
-    <!-- 각 컴포넌트들이 공통적으로 사용할 부분을 정의 -->
+    <!-- ★★ 각 컴포넌트들이 공통적으로 사용할 부분을 정의 ★★ -->
     <router-view></router-view>
   </div>
 

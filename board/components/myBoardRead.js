@@ -14,7 +14,7 @@ export default {
             props : ['object'],
             methods : {
                 boardList : function(){
-                    this.$emit('board-list');
+                    this.$emit('board-list'); // 부모의 이벤트 함수가 실행
                 }
             }
 }

@@ -22,10 +22,10 @@ export default{
             },
             methods : {
                 boardList : function(){
-                    this.$emit('board-list');
+                    this.$emit('board-list'); // 부모의 이벤트 함수가 실행
                 },
                 boardSave : function(){
-                    this.$emit('board-save', this.title, this.content);
+                    this.$emit('board-save', this.title, this.content); // 부모의 이벤트 함수가 실행
                 }
             }
 }

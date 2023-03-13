@@ -19,8 +19,10 @@ export default{ // header.js에 있는 컴포넌트를 내보내겠다는 의미
     methods : {
       loadData : function(event){ // 파일을 읽어들이는 메소드
           console.log(event.target.files);
-          let file = event.target.files[0].name;
+          let file = event.target.files[0].name; // 파일 이름
+
           if(file){ // 파일 이름이 있다면
+
               /* jQuery로 읽어오는 부분
               const vueObj = this;
               $.ajax({
@@ -34,24 +36,29 @@ export default{ // header.js에 있는 컴포넌트를 내보내겠다는 의미
                   }
               })
               */
-              fetch('data/'+file)
+              fetch('data/' + file) // 상대 경로 data/board.json
               .then(response => response.json())
-              .then(data => { // data : json파일을 읽어온것
+              .then(data => { // data : board.json파일을 읽어온것
+
                   //this.dataArray = data; // 읽어온 데이터를 vue 인스턴스에 넣어줌
+
                   this.parentData.dataArray = data; // 부모가 가진 모든 데이터리스트중에서 dataArray를 가져와서 쓴다는말
+                  
                   // if(this.dataArray != null && this.dataArray['board'].length > 0){
                   //     this.listOk = true;
                   // }
+
                   if(this.parentData.dataArray != null && this.parentData.dataArray['board'].length > 0){
-                       this.parentData.listOk = true;
-                 }
-                 this.$emit('update:parentData', this.parentData);
+                    // 부모꺼와 동기화(sync) 되었으므로 값을 변경 가능
+                    this.parentData.listOk = true; // 리스트를 출력함
+                  }
+                 this.$emit('update:parentData', this.parentData); // 자식에서 부모컴포넌트로 변경된 데이터들을 전달
               }).catch(err => console.log(err));
           }
       },
       saveBoardList : function(){
         // 게시글을 담고 있는 변수 - object
-        let data = this.dataArray;
+        let data = this.parentData.dataArray;
 
         if(data.length == 0){ // 게시글이 없다면
             alert('저장할 게시판 내용이 없습니다.');
@@ -74,6 +81,6 @@ export default{ // header.js에 있는 컴포넌트를 내보내겠다는 의미
         a.href = window.URL.createObjectURL(blob);
         // a태그 클릭 이벤트 실행
         a.click();
-    }
+        }
     }
 }

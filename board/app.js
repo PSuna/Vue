@@ -4,8 +4,8 @@ import myBoardList from './components/myBoardList.js'
 import myBoardWrite from './components/myBoardWrite.js'
 import myBoardRead from './components/myBoardRead.js'
 
- // this.$data : 부모가 가진 모든 data를 자식쪽에서 가져옴 
- //부모의 데이터에다가 불러온 데이터를 저장해야하므로 sysnc를 씀 
+// this.$data : 부모가 가진 모든 data를 자식쪽에서 가져옴 
+//부모의 데이터에다가 불러온 데이터를 저장해야하므로 sync를 씀 , = 자식과 부모의 데이터가 동기화
 let template = `
     <div>
         <my-header v-bind:parentData.sync="this.$data"></my-header> 

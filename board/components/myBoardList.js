@@ -24,13 +24,13 @@ export default{
                 // boardRead와 똑같음
                 // 'board-read' : html에서 인식하는것
                 // info : 부모 컴포넌트의 함수에 매개변수가 존재하면 같이 전달하는 매개변수
-                this.$emit('board-read', info);
+                this.$emit('board-read', info); // 부모의 이벤트 함수가 실행
             },
             boardDelete : function(no){
-                this.$emit('board-delete', no);
+                this.$emit('board-delete', no); // 부모의 이벤트 함수가 실행
             },
             boardWrite : function(){
-                this.$emit('board-write');
+                this.$emit('board-write'); // 부모의 이벤트 함수가 실행
             }
         }
     }

@@ -11,13 +11,22 @@
 <body>
   
   <div id="app">
-    <!-- 기본 값이 a 태그-->
+
+    <!-- 기본 디폴트 값이 a 태그-->
     <router-link to="/main">main</router-link>
-    <!-- tag="button" : button 태그로 변경 -->
-    <!-- li여도 클릭했을때 이동 가능 -->
+
+    <!-- tag="button" : button 태그로 변경 가능-->
+    <!-- tag="li"도 클릭했을때 이동 가능 -->
     <router-link tag="button" to="/info">info</router-link>
-    <router-link to="{name : 'userInfo'}">UserInfo</router-link>
+
+    <!-- userInfo 이름을 가진 라우트로 이동-->
+    <router-link to="{name : 'userInfo'}">UserInfo</router-link> 
+
+    <!-- user이름을 가진 라우트로 이동, 파라미터를 username : erina로 넘겨줌-->
     <router-link tag="button" :to="{name : 'user', params : {username : 'erina'}}">buttonParam</router-link>
+    
+    <!-- router가 렌더링 될 부분 정의-->
+    <!-- ★★ 각 컴포넌트들이 공통적으로 사용할 부분을 정의 ★★ -->
     <router-view></router-view>
   </div>
 
@@ -34,8 +43,8 @@
     const router = new VueRouter({
       routes : [
         {
-        path : '/main',
-        component : mainComponent
+          path : '/main',
+          component : mainComponent
         },
         {
           path: '/info',
@@ -47,7 +56,6 @@
           component : {
             template : `<div> user {{this.$route.params.id}}<br>
                               pwd {{this.$route.params.pwd}}</div>` 
-            
           }
         },
         {
@@ -60,6 +68,7 @@
             props : ['username']
           },
           // route 옵션에서 props로 데이터를 받아올 수 있도록 설정
+          // props 속성에 true 값을 넘기면 route params 값을 컴포넌트 props 로 받아올 수 있습니다.
           props : true
         }
     ]
