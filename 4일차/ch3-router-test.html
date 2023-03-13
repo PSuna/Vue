@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.13/dist/vue.js"></script>
+  <script src="vue-router.js"></script>
+</head>
+<body>
+  <div id="app">
+    <h1>hello Vue-Router</h1>
+    <p>
+      <!-- 라우터 연결 -->
+      <router-link to="/foo">Go To Foo</router-link> <!-- to="/foo" : a태그를 의미함 => 경로를 지정해줘야함 -->
+      <router-link to="/bar">Go To bar</router-link> <!-- 디폴트가 a태그임 -->
+    </p>
+
+    <!-- router가 렌더링 될 부분 정의-->
+    <!-- 각 컴포넌트들이 공통적으로 사용할 부분을 정의 -->
+    <router-view></router-view>
+  </div>
+
+  <script>
+    // router에 사용할 component 작성
+    const Foo = {
+      template : `<div>foo</div>`
+    }
+
+    const Bar = {
+      template : `<div>bar</div>`
+    }
+
+    // 컴포넌트들을 묶어 줄수 있는 라우터 인스턴스
+    const routes = [
+      {
+        path : '/foo', component : Foo
+      },
+      {
+        path: '/bar', component: Bar
+      }
+    ]
+
+    // router 인스턴스 생성
+    const router = new VueRouter({
+      routes
+    })
+
+    // Vue CLI => 종종 쓰임
+    // const app = new Vue({
+    //   router
+    // }).$mount('#app') // $mount('#app') :Vue를 app에다가 가져다가 붙일거라는 의미임
+
+    const app = new Vue({
+      el : '#app',
+      router : router
+    })
+  </script>
+
+
+</body>
+</html>
