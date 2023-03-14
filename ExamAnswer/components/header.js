@@ -37,8 +37,9 @@ export default{
     },
         loadData: function () {
             let movieDate = this.movie;
+            console.log(movieDate)
             movieDate = movieDate.replace(/\-/g, '');
-
+            console.log("정규표현식" ,movieDate)
             if(movieDate > this.getDate()){
                 alert('해당 날짜는 검색할 수 없습니다.')
                 this.movie ='';
